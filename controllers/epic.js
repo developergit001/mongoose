@@ -18,7 +18,11 @@ function list( req, res ) {
    
     try
     {
-        Epic.find( { project: project }, ( err, storage ) => {
+        var filtros = {};
+        if (project != 0)
+        filtros = { project: project };
+
+        Epic.find( filtros , ( err, storage ) => {
             if( err ) { 
                 res.status( 500 ).send( { cod: 1, msg: `Error al obtener las caracteristicas` } ); 
             }
@@ -27,7 +31,7 @@ function list( req, res ) {
                     res.status( 202 ).send( { cod: 1, msg: 'No existen caracteristicas' } ); 
                 }
                 else {
-                    res.status( 200 ).send( { cod: 0, msg: 'Operación realizada correctamente', entity: storage } );
+                        res.status( 200 ).send( { cod: 0, msg: 'Operación realizada correctamente', entity: storage } );
                 }
             }
         });

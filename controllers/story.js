@@ -16,7 +16,12 @@ function list( req, res ) {
    
     try
     {
-        Story.find( { epic: epic }, ( err, storage ) => {
+
+        var filtros = {};
+        if (epic != 0)
+        filtros = { epic: epic };
+
+        Story.find( filtros, ( err, storage ) => {
             if( err ) { 
                 res.status( 500 ).send( { cod: 1, msg: `Error al obtener las historias de usuario` } ); 
             }

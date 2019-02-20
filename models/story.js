@@ -12,5 +12,6 @@ var storySchema = Schema( {
     epic: { type: Schema.ObjectId, required: true, ref: 'Epic' },
     dependencies:[ { type: Schema.ObjectId, ref: 'Story' } ]
 } );
-
+//https://stackoverflow.com/questions/18628656/model-find-returns-empty-in-mongoose
+storySchema.set('collection', 'Story');
 module.exports = mongoose.model( 'Story', storySchema );
