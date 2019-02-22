@@ -9,8 +9,8 @@ var storySchema = Schema( {
     description: { type: String, required: true },
     estimate: { type: Number, required: true },
     priority: { type: Number, required: true },
-    epic: { type: Schema.ObjectId, required: true, ref: 'Epic' },
-    dependencies:[ { type: Schema.ObjectId, ref: 'Story' } ]
+    epic: { type: Schema.Types.ObjectId, required: true, ref: 'Epic' },
+    dependencies:[ { type: Schema.Types.ObjectId, ref: 'Story' } ]
 } );
 //https://stackoverflow.com/questions/18628656/model-find-returns-empty-in-mongoose
 storySchema.set('collection', 'Story');

@@ -33,13 +33,22 @@ function list( req, res ) {
 
 
 function save( req, res ) {
+    var mongoose = require( 'mongoose' );
     var project = new Project();
     var params  = req.body; 
-    
+    var filtros;
     if( Util.isValidParam( 'name'       , params.name        ) ) { project.name        = params.name;        }
     if( Util.isValidParam( 'description', params.description ) ) { project.description = params.description; }
 
-    Project.findOneAndUpdate( { name: project.name }
+
+    if (params._id != null){
+        filtros = { _id: params._id };
+    } else {
+        filtros = { _id: mongoose.mongo.ObjectID()};
+    }
+
+
+    Project.findOneAndUpdate( filtros
                             , { name:project.name, description: project.description }
                             , { upsert: true, new: true }, ( err, storage ) => {
         if( err ) { 

@@ -21,7 +21,16 @@ function list( req, res ) {
         if (epic != 0)
         filtros = { epic: epic };
 
-        Story.find( filtros, ( err, storage ) => {
+        Story.find( filtros ) .populate(
+            {
+                path:'epic',
+                populate:{
+                    path:'project'
+                    //,model:'Project' //NO ES NECESARIO
+                }
+            }
+        ).exec( function(err, storage ) {
+        //Story.find( filtros, ( err, storage ) => {
             if( err ) { 
                 res.status( 500 ).send( { cod: 1, msg: `Error al obtener las historias de usuario` } ); 
             }
@@ -42,9 +51,11 @@ function list( req, res ) {
 
 
 function save( req, res ) {
+    var mongoose = require( 'mongoose' );
     var story  = new Story();
     var params = req.body; 
-    
+    var filtros;
+
     if( Util.isValidParam( 'title'       , params.title       ) ) { story.title       = params.title;       }
  //   if( Util.isValidParam( 'identifier' , params.identifier  ) ) { story.identifier = params.identifier;  }
     if( Util.isValidParam( 'description', params.description ) ) { story.description  = params.description; }
@@ -52,9 +63,15 @@ function save( req, res ) {
     if( Util.isValidParam( 'priority'   , params.priority    ) ) { story.priority     = params.priority;    }
     if( Util.isValidParam( 'epic'       , params.epic        ) ) { story.epic         = params.epic;        }
 
-    Story.findOneAndUpdate( { title: story.title }, {
-  //                            identifier: story.identifier
-                              description: story.description
+    if (params._id != null){
+        filtros = { _id: params._id };
+    } else {
+        filtros = { _id: mongoose.mongo.ObjectID()};
+    }
+    Story.findOneAndUpdate( filtros, {
+    //                        identifier: story.identifier
+                              title: story.title
+                            , description: story.description
                             , estimate: story.estimate
                             , priority: story.priority
                             , epic: story.epic

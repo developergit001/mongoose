@@ -6,7 +6,7 @@ var port     = process.env.PORT || 8080
 
 mongoose.Promise = global.Promise;
 
-mongoose.connect( 'mongodb://localhost:27017/methodology', ( error, response ) => {
+mongoose.connect( 'mongodb://localhost:27017/methodology', { useNewUrlParser: true }, ( error, response ) => {
 
     if( error ) {
         throw error;
